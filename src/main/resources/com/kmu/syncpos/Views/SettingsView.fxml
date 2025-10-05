@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="15.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kmu.syncpos.controllers.SettingsController">
+    <padding><Insets bottom="20.0" left="20.0" right="20.0" top="20.0" /></padding>
+    <children>
+        <Label text="Application Settings">
+            <font><Font name="System Bold" size="24.0" /></font>
+        </Label>
+        <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+            <tabs>
+                <Tab text="Company &amp; Receipt">
+                    <content>
+                        <GridPane hgap="10" vgap="15"><padding><Insets top="20"/></padding>
+                            <Label text="Company Name" GridPane.rowIndex="0" />
+                            <TextField fx:id="companyNameField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                            <Label text="Address" GridPane.rowIndex="1" />
+                            <TextField fx:id="companyAddressField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                            <Label text="Phone" GridPane.rowIndex="2" />
+                            <TextField fx:id="companyPhoneField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                            <Label text="Currency Symbol" GridPane.rowIndex="3" />
+                            <TextField fx:id="currencySymbolField" maxWidth="80" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                            <Label text="Default Tax Rate (%)" GridPane.rowIndex="4" />
+                            <TextField fx:id="defaultTaxRateField" maxWidth="80" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                            <Label text="Receipt Footer Text" GridPane.rowIndex="5" />
+                            <TextArea fx:id="receiptFooterArea" prefHeight="80" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                        </GridPane>
+                    </content>
+                </Tab>
+                <!-- CHANGE 1: ADDED HARDWARE TAB -->
+                <Tab text="Hardware &amp; Peripherals">
+                    <content>
+                        <VBox spacing="20.0">
+                            <padding><Insets top="20.0" /></padding>
+                            <GridPane hgap="10.0" vgap="15.0">
+                                <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="150.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="300.0" />
+                                </columnConstraints>
+                                <Label text="Receipt Printer" style="-fx-font-weight: bold;" GridPane.columnSpan="2" />
+                                <Label text="Select Printer:" GridPane.rowIndex="1" />
+                                <HBox alignment="CENTER_LEFT" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                    <ComboBox fx:id="printerComboBox" prefWidth="250.0" />
+                                    <Button fx:id="refreshPrintersButton" onAction="#handleRefreshPrinters" text="Refresh List" />
+                                </HBox>
+
+                                <Label text="Cash Drawer" style="-fx-font-weight: bold;" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+                                <CheckBox fx:id="enableCashDrawerCheckBox" mnemonicParsing="false" text="Enable Cash Drawer (via Printer)" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+                                <Label text="Test Hardware" style="-fx-font-weight: bold;" GridPane.columnSpan="2" GridPane.rowIndex="4" />
+                                <ButtonBar buttonMinWidth="120.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                                    <buttons>
+                                        <Button fx:id="testPrintButton" mnemonicParsing="false" onAction="#handleTestPrint" text="Test Print" />
+                                        <Button fx:id="testCashDrawerButton" mnemonicParsing="false" onAction="#handleTestCashDrawer" text="Test Open Drawer" />
+                                    </buttons>
+                                </ButtonBar>
+                            </GridPane>
+                        </VBox>
+                    </content>
+                </Tab>
+                <Tab text="Units of Measurement">
+                    <content>
+                        <BorderPane>
+                            <padding><Insets top="15.0" /></padding>
+                            <center>
+                                <TableView fx:id="unitsTableView">
+                                    <columns>
+                                        <TableColumn fx:id="unitNameCol" prefWidth="150" text="Name" />
+                                        <TableColumn fx:id="unitAbbrCol" prefWidth="100" text="Abbreviation" />
+                                    </columns>
+                                    <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY" /></columnResizePolicy>
+                                </TableView>
+                            </center>
+                            <right>
+                                <VBox spacing="10"><BorderPane.margin><Insets left="10"/></BorderPane.margin>
+                                    <Button fx:id="addUnitButton" text="Add New" maxWidth="Infinity" onAction="#handleAddUnit" />
+                                    <Button fx:id="editUnitButton" text="Edit Selected" maxWidth="Infinity" onAction="#handleEditUnit" />
+                                    <Button fx:id="deleteUnitButton" text="Delete Selected" maxWidth="Infinity" onAction="#handleDeleteUnit" />
+                                </VBox>
+                            </right>
+                        </BorderPane>
+                    </content>
+                </Tab>
+                <Tab text="Database">
+                    <content>
+                        <VBox spacing="10"><padding><Insets top="20"/></padding>
+                            <Label text="Database Management" style="-fx-font-weight: bold;" />
+                            <HBox spacing="10">
+                                <Button fx:id="backupDbButton" text="Backup Database" />
+                                <Button fx:id="restoreDbButton" text="Restore from Backup" />
+                            </HBox>
+                            <Label text="Location:" />
+                            <Label fx:id="dbLocationLabel" text="[Database file path]" style="-fx-font-style: italic;" />
+                        </VBox>
+                    </content>
+                </Tab>
+            </tabs>
+        </TabPane>
+        <HBox alignment="CENTER_RIGHT">
+            <Button fx:id="saveSettingsButton" onAction="#handleSaveAllSettings" text="Save All Settings" prefHeight="40.0" />
+        </HBox>
+    </children>
+</VBox>

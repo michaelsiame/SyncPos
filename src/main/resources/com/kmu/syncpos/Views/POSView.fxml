@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kmu.syncpos.controllers.POSController">
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+    </padding>
+
+    <!-- CENTER: The main sale cart -->
+    <center>
+        <VBox spacing="10.0">
+            <BorderPane.margin>
+                <Insets right="10" left="10" />
+            </BorderPane.margin>
+            <children>
+                <Label text="Current Bill" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+                <TableView fx:id="cartTableView" editable="true" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <!-- CORRECTED: Renamed fx:id to match the controller variables -->
+                        <TableColumn fx:id="cartItemNameCol" prefWidth="250.0" text="Product" />
+                        <TableColumn fx:id="cartQtyCol" prefWidth="100.0" text="Quantity" />
+                        <TableColumn fx:id="cartPriceCol" prefWidth="120.0" text="Unit Price" />
+                        <TableColumn fx:id="cartTotalCol" prefWidth="120.0" text="Total" />
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                    </columnResizePolicy>
+                </TableView>
+                <HBox spacing="10">
+                    <!-- CORRECTED: Added onAction handlers -->
+                    <Button fx:id="removeItemButton" onAction="#handleRemoveItem" text="Remove Selected Item" style="-fx-background-color: #E8A0A0;" />
+                    <Button fx:id="clearCartButton" onAction="#handleClearCart" text="Clear Cart" style="-fx-background-color: #F0E68C;" />
+                </HBox>
+            </children>
+        </VBox>
+    </center>
+
+    <!-- LEFT: Product Selection -->
+    <left>
+        <VBox minWidth="300.0" spacing="10.0">
+            <children>
+                <Label text="Product Search" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+                <TextField fx:id="productSearchField" promptText="Scan barcode or type name..." />
+                <TableView fx:id="productSearchTableView" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <!-- CORRECTED: Ensured fx:id's are present and match controller -->
+                        <TableColumn fx:id="searchProductNameCol" prefWidth="200.0" text="Name" />
+                        <TableColumn fx:id="searchProductStockCol" prefWidth="100.0" text="Stock" />
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                    </columnResizePolicy>
+                </TableView>
+            </children>
+        </VBox>
+    </left>
+
+    <!-- RIGHT: Customer and Checkout -->
+    <right>
+        <VBox minWidth="350.0" spacing="15.0">
+            <children>
+                <VBox spacing="5" style="-fx-border-color: #ccc; -fx-border-width: 1; -fx-padding: 10; -fx-background-color: #FAFAFA;">
+                    <Label text="Customer" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+                    <HBox spacing="5" alignment="CENTER_LEFT">
+                        <ComboBox fx:id="customerComboBox" promptText="Search/Select Customer" editable="true" maxWidth="Infinity" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="addCustomerButton" text="+ New" />
+                    </HBox>
+                    <Label fx:id="selectedCustomerLabel" text="Selected: Walk-in Customer" style="-fx-padding: 5 0;" />
+                </VBox>
+
+                <GridPane hgap="10" vgap="10" style="-fx-font-size: 14px;">
+                    <columnConstraints>
+                        <ColumnConstraints />
+                        <ColumnConstraints hgrow="ALWAYS" />
+                    </columnConstraints>
+                    <Label text="Subtotal:" GridPane.rowIndex="0" />
+                    <Label fx:id="subtotalLabel" text="ZMW" alignment="CENTER_RIGHT" maxWidth="Infinity" style="-fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                    <Label text="Tax:" GridPane.rowIndex="1" />
+                    <Label fx:id="taxLabel" text="ZMW" alignment="CENTER_RIGHT" maxWidth="Infinity" style="-fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                    <Label text="Discount:" GridPane.rowIndex="2" />
+                    <TextField fx:id="discountField" text="0.00" alignment="CENTER_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                </GridPane>
+
+                <Separator />
+
+                <VBox alignment="CENTER">
+                    <Label text="TOTAL" style="-fx-font-size: 20px;" />
+                    <Label fx:id="totalAmountLabel" text="ZMW" style="-fx-font-size: 42px; -fx-font-weight: bold; -fx-text-fill: #2E8B57;" />
+                </VBox>
+
+                <Region VBox.vgrow="ALWAYS" />
+
+                <!-- Checkout Button -->
+                <Button fx:id="checkoutButton" onAction="#handleCheckout" text="Checkout" maxWidth="Infinity" prefHeight="50" style="-fx-font-size: 20px; -fx-background-color: #4CAF50; -fx-text-fill: white;" />
+            </children>
+        </VBox>
+    </right>
+</BorderPane>

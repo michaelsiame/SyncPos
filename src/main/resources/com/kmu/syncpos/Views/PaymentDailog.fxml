@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<VBox spacing="15.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kmu.syncpos.controllers.PaymentDialogController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+    <children>
+        <GridPane hgap="10.0" vgap="10.0">
+            <children>
+                <Label text="Total Due:" style="-fx-font-weight: bold;" />
+                <Label fx:id="totalDueLabel" text="\$0.00" style="-fx-font-size: 16px;" GridPane.columnIndex="1" />
+
+                <Label text="Amount Paid:" style="-fx-font-weight: bold;" GridPane.rowIndex="1"/>
+                <Label fx:id="amountPaidLabel" text="\$0.00" style="-fx-font-size: 16px;" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                <Label text="Remaining Balance:" style="-fx-font-weight: bold; -fx-text-fill: red;" GridPane.rowIndex="2"/>
+                <Label fx:id="balanceLabel" text="\$0.00" style="-fx-font-size: 16px; -fx-text-fill: red;" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+            </children>
+        </GridPane>
+        <Separator />
+        <GridPane hgap="10.0" vgap="10.0">
+            <children>
+                <Label text="Payment Method:" GridPane.rowIndex="0" />
+                <ComboBox fx:id="paymentMethodComboBox" promptText="Select Method" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                <Label text="Amount to Pay:" GridPane.rowIndex="1" />
+                <TextField fx:id="amountField" promptText="Enter amount" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                <Label text="Reference:" GridPane.rowIndex="2" />
+                <TextField fx:id="referenceField" promptText="(Optional) Card #, Check #" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            </children>
+        </GridPane>
+        <HBox alignment="CENTER_RIGHT" spacing="10.0">
+            <children>
+                <Label fx:id="changeLabel" text="Change: \$0.00" style="-fx-font-weight: bold;" />
+                <Button fx:id="addPaymentButton" onAction="#handleAddPayment" text="Add Payment" defaultButton="true" />
+            </children>
+        </HBox>
+        <TableView fx:id="paymentsTableView" prefHeight="100.0">
+            <columns>
+                <TableColumn fx:id="amountCol" prefWidth="100" text="Amount"/>
+                <TableColumn fx:id="methodCol" prefWidth="120" text="Method"/>
+                <TableColumn fx:id="dateCol" prefWidth="150" text="Date"/>
+            </columns>
+        </TableView>
+        <Button fx:id="doneButton" onAction="#handleDone" text="Done" maxWidth="Infinity" />
+    </children>
+</VBox>

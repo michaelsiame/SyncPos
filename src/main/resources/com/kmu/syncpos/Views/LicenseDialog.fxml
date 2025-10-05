@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.StackPane?>
+
+<StackPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kmu.syncpos.controllers.LicenseDialogController" style="-fx-background-color: #F4F4F4;" prefHeight="220.0" prefWidth="400.0">
+    <children>
+        <VBox alignment="CENTER" maxWidth="350.0" spacing="15.0">
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+            <children>
+                <Label text="SyncPOS Activation">
+                    <font>
+                        <Font name="System Bold" size="24.0" />
+                    </font>
+                </Label>
+                <Label text="Please enter your license key to continue." wrapText="true" textAlignment="CENTER" />
+                <Label fx:id="errorLabel" textFill="RED" managed="false" />
+                <HBox alignment="CENTER" spacing="10.0">
+                    <children>
+                        <Label text="License Key:" />
+                        <TextField fx:id="licenseKeyField" promptText="XXXX-XXXX-XXXX-XXXX" HBox.hgrow="ALWAYS" />
+                    </children>
+                </HBox>
+                <Button fx:id="validateButton" onAction="#handleValidate" defaultButton="true" prefWidth="120.0" text="Activate" />
+            </children>
+        </VBox>
+    </children>
+</StackPane>

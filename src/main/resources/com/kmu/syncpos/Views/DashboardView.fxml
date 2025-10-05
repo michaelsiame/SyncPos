@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+<VBox spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kmu.syncpos.controllers.DashboardController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+    <children>
+        <Label text="Dashboard">
+            <font>
+                <Font name="System Bold" size="28.0" />
+            </font>
+        </Label>
+        <GridPane hgap="20.0" vgap="20.0" VBox.vgrow="ALWAYS">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" percentWidth="25.0" />
+                <ColumnConstraints hgrow="SOMETIMES" percentWidth="25.0" />
+                <ColumnConstraints hgrow="SOMETIMES" percentWidth="50.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="150.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="300.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <VBox style="-fx-background-color: white; -fx-padding: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
+                    <children>
+                        <Label text="Today's Sales" style="-fx-font-size: 16px; -fx-text-fill: #555;" />
+                        <Label fx:id="todaysSalesLabel" text="\$0.00" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-padding: 10 0 0 0;" />
+                    </children>
+                </VBox>
+                <VBox style="-fx-background-color: white; -fx-padding: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);" GridPane.columnIndex="1">
+                    <children>
+                        <Label text="Transactions Today" style="-fx-font-size: 16px; -fx-text-fill: #555;" />
+                        <Label fx:id="todaysTransactionsLabel" text="0" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-padding: 10 0 0 0;" />
+                    </children>
+                </VBox>
+                <TitledPane text="Low Stock Items" collapsible="false" style="-fx-font-size: 14px;" GridPane.columnSpan="2" GridPane.rowIndex="1">
+                    <content>
+                        <ListView fx:id="lowStockListView" />
+                    </content>
+                </TitledPane>
+                <TitledPane text="Sales Overview (Last 7 Days)" collapsible="false" style="-fx-font-size: 14px;" GridPane.columnIndex="2" GridPane.rowSpan="2">
+                    <content>
+                        <BarChart fx:id="salesChart" animated="false" legendVisible="false">
+                            <xAxis><CategoryAxis side="BOTTOM" /></xAxis>
+                            <yAxis><NumberAxis side="LEFT" /></yAxis>
+                        </BarChart>
+                    </content>
+                </TitledPane>
+            </children>
+        </GridPane>
+    </children>
+</VBox>

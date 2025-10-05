@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<BorderPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kmu.syncpos.controllers.MainController">
+    <top>
+        <MenuBar fx:id="menuBar">
+            <menus>
+                <Menu mnemonicParsing="false" text="File">
+                    <items>
+                        <MenuItem fx:id="dashboardMenuItem" onAction="#showDashboard" text="Dashboard" />
+                        <MenuItem fx:id="posMenuItem" onAction="#showPOS" text="Point of Sale" />
+                        <SeparatorMenuItem />
+                        <MenuItem fx:id="settingsMenuItem" onAction="#showSettings" text="Settings" />
+                        <MenuItem fx:id="logoutMenuItem" onAction="#handleLogout" text="Logout" />
+                        <MenuItem onAction="#handleExit" text="Exit" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Management">
+                    <items>
+                        <MenuItem fx:id="productManagementMenuItem" onAction="#showProductManagement" text="Products" />
+                        <MenuItem fx:id="purchaseMenuItem" onAction="#showPurchaseView" text="Record Purchase / Stock-in" />
+                        <SeparatorMenuItem />
+                        <MenuItem fx:id="categoryManagementMenuItem" onAction="#showCategoryManagement" text="Categories" />
+                        <MenuItem fx:id="customerManagementMenuItem" onAction="#showCustomerManagement" text="Customers" />
+                        <MenuItem fx:id="supplierManagementMenuItem" onAction="#showSupplierManagement" text="Suppliers" />
+                        <MenuItem fx:id="userManagementMenuItem" onAction="#showUserManagement" text="Users" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Analytics">
+                    <items>
+                        <MenuItem fx:id="reportsMenuItem" onAction="#showReports" text="Reports" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+    </top>
+    <center>
+        <StackPane fx:id="contentPane" style="-fx-background-color: #EAEAEA;" />
+    </center>
+    <bottom>
+        <HBox alignment="CENTER_LEFT" spacing="10.0" style="-fx-background-color: #DDDDDD; -fx-border-color: #CCCCCC; -fx-border-width: 1 0 0 0;">
+            <padding>
+                <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+            </padding>
+            <children>
+                <Label text="User:" />
+                <Label fx:id="currentUserLabel" text="[Username]" style="-fx-font-weight: bold;" />
+                <Label text="Role:" />
+                <Label fx:id="currentUserRoleLabel" text="[Role]" />
+                <Label fx:id="syncStatusLabel" text="Initializing..."/>
+            </children>
+        </HBox>
+    </bottom>
+</BorderPane>

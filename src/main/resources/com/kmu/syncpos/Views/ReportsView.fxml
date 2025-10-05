@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Font?>
+<?import javafx.geometry.Insets?>
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kmu.syncpos.controllers.ReportsController">
+    <padding><Insets bottom="10.0" left="10.0" right="10.0" top="10.0" /></padding>
+    <top>
+        <VBox spacing="15.0">
+            <children>
+                <Label text="Reports &amp; Analytics" BorderPane.alignment="CENTER">
+                    <font><Font name="System Bold" size="24.0" /></font>
+                </Label>
+                <HBox alignment="CENTER_LEFT" spacing="10.0" style="-fx-padding: 10; -fx-border-color: #ccc; -fx-background-color: #f9f9f9;">
+                    <Label text="Report Type:" />
+                    <ComboBox fx:id="reportTypeComboBox" promptText="Select a Report" />
+                    <Label text="From:" />
+                    <DatePicker fx:id="startDatePicker" />
+                    <Label text="To:" />
+                    <DatePicker fx:id="endDatePicker" />
+                    <Button fx:id="generateReportButton" text="Generate Report" defaultButton="true" />
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Button fx:id="exportButton" text="Export to CSV" />
+                </HBox>
+            </children>
+        </VBox>
+    </top>
+    <center>
+        <!-- This StackPane will be populated by the controller based on the report type -->
+        <StackPane fx:id="reportContentPane" BorderPane.alignment="CENTER">
+            <BorderPane.margin><Insets top="15.0" /></BorderPane.margin>
+            <children>
+                <Label text="Select a report type and date range, then click 'Generate Report'." style="-fx-font-size: 16px; -fx-text-fill: grey;" />
+
+                <!-- Example structure for a Sales Report (kept here for reference, controller will manage visibility) -->
+                <VBox fx:id="salesReportPane" spacing="10.0" visible="false">
+                    <children>
+                        <GridPane hgap="20.0" style="-fx-padding: 10; -fx-background-color: white; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 1);">
+                            <columnConstraints><ColumnConstraints hgrow="SOMETIMES" /><ColumnConstraints hgrow="SOMETIMES" /><ColumnConstraints hgrow="SOMETIMES" /></columnConstraints>
+                            <VBox alignment="CENTER" GridPane.columnIndex="0"><Label text="TOTAL SALES"/><Label fx:id="salesTotalLabel" style="-fx-font-size: 22px; -fx-font-weight: bold;"/></VBox>
+                            <VBox alignment="CENTER" GridPane.columnIndex="1"><Label text="TOTAL PROFIT"/><Label fx:id="salesProfitLabel" style="-fx-font-size: 22px; -fx-font-weight: bold;"/></VBox>
+                            <VBox alignment="CENTER" GridPane.columnIndex="2"><Label text="TRANSACTIONS"/><Label fx:id="salesTransactionsLabel" style="-fx-font-size: 22px; -fx-font-weight: bold;"/></VBox>
+                        </GridPane>
+                        <TableView fx:id="salesDetailTableView" VBox.vgrow="ALWAYS">
+                            <!-- Columns for Sales details will be added by controller -->
+                        </TableView>
+                    </children>
+                </VBox>
+
+                <!-- Example structure for an Inventory Report -->
+                <VBox fx:id="inventoryReportPane" spacing="10.0" visible="false">
+                    <children>
+                        <GridPane hgap="20.0" style="-fx-padding: 10; -fx-background-color: white; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 1);">
+                            <columnConstraints><ColumnConstraints hgrow="SOMETIMES" /><ColumnConstraints hgrow="SOMETIMES" /></columnConstraints>
+                            <VBox alignment="CENTER" GridPane.columnIndex="0"><Label text="TOTAL STOCK COUNT"/><Label fx:id="inventoryCountLabel" style="-fx-font-size: 22px; -fx-font-weight: bold;"/></VBox>
+                            <VBox alignment="CENTER" GridPane.columnIndex="1"><Label text="TOTAL STOCK VALUE (Cost)"/><Label fx:id="inventoryValueLabel" style="-fx-font-size: 22px; -fx-font-weight: bold;"/></VBox>
+                        </GridPane>
+                        <TableView fx:id="inventoryDetailTableView" VBox.vgrow="ALWAYS">
+                            <!-- Columns for Inventory details will be added by controller -->
+                        </TableView>
+                    </children>
+                </VBox>
+
+            </children>
+        </StackPane>
+    </center>
+</BorderPane>

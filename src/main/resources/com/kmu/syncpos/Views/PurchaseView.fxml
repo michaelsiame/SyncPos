@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kmu.syncpos.controllers.PurchaseController">
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+    </padding>
+    <top>
+        <Label text="Record Purchase / Stock-in" BorderPane.alignment="CENTER">
+            <font>
+                <Font name="System Bold" size="24.0" />
+            </font>
+            <padding>
+                <Insets bottom="15.0" />
+            </padding>
+        </Label>
+    </top>
+
+    <!-- LEFT: Product Selection -->
+    <left>
+        <VBox minWidth="300.0" spacing="10.0">
+            <children>
+                <Label text="Product Search" style="-fx-font-weight: bold;" />
+                <TextField fx:id="productSearchField" promptText="Search by name, SKU, barcode..." />
+                <TableView fx:id="productSearchTableView" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="searchProductNameCol" prefWidth="200.0" text="Name" />
+                        <TableColumn fx:id="searchProductStockCol" text="Current Stock" />
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                    </columnResizePolicy>
+                </TableView>
+            </children>
+        </VBox>
+    </left>
+
+    <!-- CENTER: The Purchase Order List -->
+    <center>
+        <VBox spacing="10.0">
+            <BorderPane.margin>
+                <Insets left="10.0" right="10.0" />
+            </BorderPane.margin>
+            <children>
+                <Label text="Items to Purchase" style="-fx-font-weight: bold;" />
+                <TableView fx:id="purchaseTableView" editable="true" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="purchaseItemNameCol" prefWidth="250.0" text="Product" />
+                        <TableColumn fx:id="purchaseQtyCol" prefWidth="100.0" text="Quantity" />
+                        <TableColumn fx:id="purchasePriceCol" prefWidth="120.0" text="Unit Cost" />
+                        <TableColumn fx:id="purchaseTotalCol" prefWidth="120.0" text="Subtotal" />
+                    </columns>
+                </TableView>
+                <Button fx:id="removeItemButton" onAction="#handleRemoveItem" text="Remove Selected Item" style="-fx-background-color: #E8A0A0;" />
+            </children>
+        </VBox>
+    </center>
+
+    <!-- RIGHT: Supplier & Transaction Details -->
+    <right>
+        <VBox minWidth="350.0" spacing="15.0">
+            <children>
+                <GridPane hgap="10" vgap="10">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" />
+                        <ColumnConstraints hgrow="SOMETIMES" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <Label text="Supplier:" GridPane.rowIndex="0" />
+                        <ComboBox fx:id="supplierComboBox" maxWidth="Infinity" promptText="Select a supplier" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                        <Label text="Purchase Date:" GridPane.rowIndex="1" />
+                        <DatePicker fx:id="purchaseDatePicker" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                        <Label text="Status:" GridPane.rowIndex="2" />
+                        <ComboBox fx:id="paymentStatusComboBox" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                        <Label text="Reference / Invoice #:" GridPane.rowIndex="3" />
+                        <TextField fx:id="referenceField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+                        <Label text="Notes:" GridPane.rowIndex="4" />
+                        <TextArea fx:id="notesArea" prefHeight="60.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                    </children>
+                </GridPane>
+
+                <Separator />
+
+                <GridPane hgap="10" vgap="5">
+                    <Label style="-fx-font-weight: bold;" text="Total Items:" GridPane.rowIndex="0" />
+                    <Label fx:id="totalItemsLabel" text="0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                    <Label style="-fx-font-weight: bold;" text="Grand Total:" GridPane.rowIndex="1" />
+                    <Label fx:id="grandTotalLabel" style="-fx-font-size: 18px;" text="ZMW 0.00" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                </GridPane>
+
+                <Region VBox.vgrow="ALWAYS" />
+
+                <Button fx:id="completePurchaseButton" maxWidth="Infinity" onAction="#handleCompletePurchase" prefHeight="50.0" style="-fx-font-size: 20px; -fx-background-color: #4682B4; -fx-text-fill: white;" text="Complete Purchase" />
+            </children>
+        </VBox>
+    </right>
+</BorderPane>
