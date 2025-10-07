@@ -14,6 +14,7 @@ public class StockLedgerDTO extends BaseDTO {
 
     @SerializedName("tenant_id")
     private String tenantId;
+    @SerializedName("user_uuid") private String userUuid;
 
     // --- Relational IDs & UUIDs ---
 

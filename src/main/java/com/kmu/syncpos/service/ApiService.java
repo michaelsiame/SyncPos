@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import com.kmu.syncpos.dto.*;
 
@@ -30,6 +31,7 @@ public final class ApiService {
     // --- Shared Components ---
     private final OkHttpClient client = new OkHttpClient();
     private final Gson gson = new GsonBuilder()
+            .excludeFieldsWithoutExposeAnnotation()
             .registerTypeAdapter(OffsetDateTime.class, new OffsetDateTimeAdapter())
             .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
             .create();
@@ -101,26 +103,20 @@ public final class ApiService {
 
     // --- Entity-Specific POST Methods ---
 
-    public boolean postSettings(SettingsDTO dto) { return post("settings", dto); }
-    public boolean postUser(UserDTO dto) { return post("users", dto); }
-    public boolean postSupplier(SupplierDTO dto) { return post("suppliers", dto); }
-    public boolean postCustomer(CustomerDTO dto) { return post("customers", dto); }
-    public boolean postCategory(CategoryDTO dto) { return post("categories", dto); }
-    public boolean postUnit(UnitDTO dto) { return post("units", dto); }
-    public boolean postProduct(ProductDTO dto) { return post("products", dto); }
-    public boolean postSale(SaleDTO dto) { return post("sales", dto); }
-    public boolean postSaleItem(SaleItemDTO dto) { return post("sale_items", dto); }
-    public boolean postPayment(PaymentDTO dto) { return post("payments", dto); }
-
-    // Corrected table name to match our schema
-    public boolean postStockLedger(StockLedgerDTO dto) {
-        return post("stock_ledger", dto);
+    public boolean postSettings(SettingsDTO dto) {
+        return post("settings", dto);
     }
-
-    // --- CHANGE 1: ADDED NEW POST METHOD ---
-    public boolean postProductSupplier(ProductSupplierDTO dto) {
-        return post("product_suppliers", dto);
-    }
+    public boolean postUser(UserDTO dto) { return postRpc("upsert_user", dto); }
+    public boolean postSupplier(SupplierDTO dto) { return postRpc("upsert_supplier", dto); }
+    public boolean postCustomer(CustomerDTO dto) { return postRpc("upsert_customer", dto); }
+    public boolean postCategory(CategoryDTO dto) { return postRpc("upsert_category", dto); }
+    public boolean postUnit(UnitDTO dto) { return postRpc("upsert_unit", dto); }
+    public boolean postProduct(ProductDTO dto) { return postRpc("upsert_product", dto); }
+    public boolean postProductSupplier(ProductSupplierDTO dto) { return postRpc("upsert_product_supplier", dto); }
+    public boolean postSale(SaleDTO dto) { return postRpc("upsert_sale", dto); }
+    public boolean postSaleItem(SaleItemDTO dto) { return postRpc("upsert_sale_item", dto); }
+    public boolean postPayment(PaymentDTO dto) { return postRpc("upsert_payment", dto); }
+    public boolean postStockLedger(StockLedgerDTO dto) { return postRpc("upsert_stock_ledger", dto); }
 
     // --- Entity-Specific GET ALL Methods ---
 
@@ -177,5 +173,34 @@ public final class ApiService {
 
     private void logException(String method, String url, Exception e) {
         System.err.printf("%s request to %s threw an exception: %s%n", method, url, e.getMessage());
+    }
+    // Add this new helper method to ApiService.java
+    private <D> boolean postRpc(String functionName, D dto) {
+        String url = SUPABASE_URL + "/rpc/" + functionName;
+
+        // The payload needs to be wrapped in an object with a key that matches the function's parameter name.
+        // We've consistently named our parameter 'item'.
+        String jsonPayload = gson.toJson(Map.of("item", dto));
+
+        RequestBody body = RequestBody.create(jsonPayload, JSON);
+
+        Request req = new Request.Builder()
+                .url(url)
+                .addHeader("apikey", SUPABASE_ANON_KEY)
+                .addHeader("Authorization", "Bearer " + SUPABASE_ANON_KEY)
+                .addHeader("Content-Type", "application/json") // Added for clarity
+                .post(body)
+                .build();
+
+        try (Response resp = client.newCall(req).execute()) {
+            if (!resp.isSuccessful()) {
+                logError("RPC " + functionName, url, resp);
+                return false;
+            }
+            return true;
+        } catch (IOException e) {
+            logException("RPC " + functionName, url, e);
+            return false;
+        }
     }
 }

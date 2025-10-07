@@ -1,5 +1,6 @@
 package com.kmu.syncpos.dto;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +14,8 @@ public class PaymentDTO extends BaseDTO {
     private long saleId;
 
     private double amount;
-
+    @Expose
+    @SerializedName("user_uuid") private String userUuid;
     @SerializedName("payment_method")
     private String paymentMethod;
     private String reference;

@@ -1,5 +1,6 @@
 package com.kmu.syncpos.dto;
 
+import com.google.gson.annotations.Expose; // <-- IMPORT
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,64 +12,44 @@ import java.util.List;
 @Getter
 @Setter
 public class SaleDTO extends BaseDTO {
-    private String uuid;
-
-    @SerializedName("tenant_id")
-    private String tenantId;
-
-    private String type;
-
-    @SerializedName("user_id")
-    private long userId;
-
+    @Expose @SerializedName("uuid") private String uuid;
+    @Expose @SerializedName("tenant_id") private String tenantId;
+    @Expose private String type;
+    @Expose @SerializedName("user_id") private long userId;
+    @Expose @SerializedName("user_uuid") private String userUuid;
     // --- Relational IDs & UUIDs ---
-    // Both local IDs and UUIDs are needed for different purposes.
 
-    // [For Local Use] The local database ID of the customer.
-    @SerializedName("customer_id")
-    private Long customerId;
+    // [For Local Use] - DO NOT EXPOSE. This field will NOT be sent to the API.
+    @SerializedName("customer_id") private Long customerId;
 
-    // [For Syncing] The UUID of the customer. ESSENTIAL for the DAO's upsert method.
-    @SerializedName("customer_uuid")
-    private String customerUuid;
+    // [For Syncing] - EXPOSE THIS. This field WILL be sent to the API.
+    @Expose @SerializedName("customer_uuid") private String customerUuid;
 
-    // [For Local Use] The local database ID of the supplier.
-    @SerializedName("supplier_id")
-    private Long supplierId;
+    // [For Local Use] - DO NOT EXPOSE.
+    @SerializedName("supplier_id") private Long supplierId;
 
-    // [For Syncing] The UUID of the supplier. ESSENTIAL for the DAO's upsert method.
-    @SerializedName("supplier_uuid")
-    private String supplierUuid;
-
+    // [For Syncing] - EXPOSE THIS.
+    @Expose @SerializedName("supplier_uuid") private String supplierUuid;
 
     // --- Financial Data ---
-    private double subtotal;
-    private double tax;
-    private double discount;
-    private double total;
-
+    @Expose private double subtotal;
+    @Expose private double tax;
+    @Expose private double discount;
+    @Expose private double total;
 
     // --- Status & Notes ---
-    @SerializedName("payment_method")
-    private String paymentMethod;
-
-    @SerializedName("payment_status")
-    private String paymentStatus;
-    private String notes;
-
+    @Expose @SerializedName("payment_method") private String paymentMethod;
+    @Expose @SerializedName("payment_status") private String paymentStatus;
+    @Expose private String notes;
 
     // --- Timestamps & Flags ---
-    @SerializedName("created_at")
-    private OffsetDateTime createdAt;
-
-    @SerializedName("last_updated_at")
-    private OffsetDateTime lastUpdatedAt;
-
-    private transient int isSynced;
-
-    @SerializedName("is_deleted")
-    private boolean isDeleted;
+    @Expose @SerializedName("created_at") private OffsetDateTime createdAt;
+    @Expose @SerializedName("last_updated_at") private OffsetDateTime lastUpdatedAt;
+    @Expose @SerializedName("is_deleted") private boolean isDeleted;
 
     // A list to hold related SaleItemDTOs.
-    private List<SaleItemDTO> items = new ArrayList<>();
+    @Expose private List<SaleItemDTO> items = new ArrayList<>();
+
+    // isSynced is local-only, so we correctly do NOT expose it.
+    private transient int isSynced;
 }

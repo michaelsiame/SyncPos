@@ -60,7 +60,9 @@ public class DashboardController {
                     setText(null);
                 } else {
                     setText(String.format("%s (Stock: %.1f, Min: %d)",
-                            item.getName(), item.getCurrentStock(), item.getMinStockLevel()));
+                            item.getName(),
+                            item.getCurrentStock(),
+                            (long) item.getMinStockLevel()));
                 }
             }
         });

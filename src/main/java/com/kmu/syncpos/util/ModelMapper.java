@@ -207,22 +207,22 @@ public final class ModelMapper {
         p.setName(dto.getName());
         p.setDescription(dto.getDescription());
         p.setProductType(dto.getProductType());
-        p.setCategoryId(dto.getCategoryId());
-        p.setUnitId(dto.getUnitId());
-        p.setSupplierId(dto.getSupplierId());
+        p.setCategoryId(dto.getCategoryId()!= null ? dto.getCategoryId() : null);
+        p.setUnitId(dto.getUnitId() != null ? dto.getUnitId() : null);
+        p.setSupplierId(dto.getSupplierId() != null ? dto.getSupplierId() : null);
         p.setCategoryUuid(dto.getCategoryUuid());
         p.setUnitUuid(dto.getUnitUuid());
         p.setSupplierUuid(dto.getSupplierUuid());
-        p.setPurchasePrice(dto.getPurchasePrice());
-        p.setSellingPrice(dto.getSellingPrice());
-        p.setTaxRate(dto.getTaxRate());
-        p.setMinStockLevel(dto.getMinStockLevel());
-        p.setReorderQuantity(dto.getReorderQuantity());
+        p.setPurchasePrice(dto.getPurchasePrice() != null ? dto.getPurchasePrice() : 0.0);
+        p.setSellingPrice(dto.getSellingPrice() != null ? dto.getSellingPrice() : 0.0);
+        p.setTaxRate(dto.getTaxRate() != null ? dto.getTaxRate() : 0.0);
+        p.setMinStockLevel(dto.getMinStockLevel() != null ? dto.getMinStockLevel() : 0.0);
+        p.setReorderQuantity(dto.getReorderQuantity() != null ? dto.getReorderQuantity() : 0.0);
         p.setIsActive(dto.isActive());
         p.setLastUpdatedAt(toLdt(dto.getLastUpdatedAt()));
         p.setIsSynced(dto.getIsSynced());
         p.setIsDeleted(dto.isDeleted());
-        p.setCurrentStock(dto.getCurrentStock());
+        p.setCurrentStock(dto.getCurrentStock() != null ? dto.getCurrentStock() : 0.0);
         return p;
     }
 
