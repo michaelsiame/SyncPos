@@ -29,7 +29,7 @@ public class StockLedger {
     public String getProductUuid() { return productUuid.get(); }
     public double getQuantityDelta() { return quantityDelta.get(); }
     public String getReason() { return reason.get(); }
-    public Long getsaleItemId() { return saleItemId.get(); }
+    public Long getSaleItemId() { return saleItemId.get(); }
     public String getSaleItemUuid () { return saleItemUuid .get(); }
     public long getUserId() { return userId.get(); }
     public String getNotes() { return notes.get(); }
@@ -46,7 +46,7 @@ public class StockLedger {
     public void setProductUuid(String productUuid) { this.productUuid.set(productUuid); }
     public void setQuantityDelta(double quantityDelta) { this.quantityDelta.set(quantityDelta); }
     public void setReason(String reason) { this.reason.set(reason); }
-    public void setsaleItemId(Long saleItemId) { this.saleItemId.set(saleItemId); }
+    public void setSaleItemId(Long saleItemId) { this.saleItemId.set(saleItemId); }
     public void setSaleItemUuid (String saleItemUuid ) { this.saleItemUuid .set(saleItemUuid ); }
     public void setUserId(long userId) { this.userId.set(userId); }
     public void setNotes(String notes) { this.notes.set(notes); }

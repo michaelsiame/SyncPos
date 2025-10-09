@@ -445,7 +445,7 @@ public final class ModelMapper {
         sl.setProductUuid(dto.getProductUuid());
         sl.setQuantityDelta(dto.getQuantityDelta());
         sl.setReason(dto.getReason());
-        sl.setsaleItemId(dto.getSaleItemId());
+        sl.setSaleItemId(dto.getSaleItemId());
         sl.setSaleItemUuid(dto.getSaleItemUuid());
         sl.setUserId(dto.getUserId());
         sl.setNotes(dto.getNotes());
@@ -469,7 +469,7 @@ public final class ModelMapper {
         dto.setProductUuid(sl.getProductUuid());
         dto.setQuantityDelta(sl.getQuantityDelta());
         dto.setReason(sl.getReason());
-        dto.setSaleItemId(sl.getsaleItemId());
+        dto.setSaleItemId(sl.getSaleItemId());
         dto.setSaleItemUuid(sl.getSaleItemUuid());
         dto.setUserId(sl.getUserId());
         dto.setNotes(sl.getNotes());
