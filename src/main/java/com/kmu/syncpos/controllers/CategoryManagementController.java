@@ -210,7 +210,17 @@ public class CategoryManagementController {
         dialog.setTitle("Change Parent");
         dialog.setHeaderText("Select a new parent for '" + selectedCategory.getName() + "'");
         dialog.setContentText("New Parent:");
+        dialog.getComboBox().setConverter(new StringConverter<Category>() {
+            @Override
+            public String toString(Category category) {
+                return category == null ? "" : category.getName();
+            }
 
+            @Override
+            public Category fromString(String string) {
+                return null;
+            }
+        });
 
         Optional<Category> result = dialog.showAndWait();
         result.ifPresent(newParent -> {

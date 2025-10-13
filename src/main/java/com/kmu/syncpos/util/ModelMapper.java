@@ -235,6 +235,9 @@ public final class ModelMapper {
         dto.setId(p.getId());
         dto.setUuid(p.getUuid());
         dto.setTenantId(p.getTenantId());
+        dto.setCategoryUuid(p.getCategoryUuid());
+        dto.setUnitUuid(p.getUnitUuid());
+        dto.setSupplierUuid(p.getSupplierUuid());
         dto.setSku(p.getSku());
         dto.setBarcode(p.getBarcode());
         dto.setName(p.getName());
@@ -271,6 +274,8 @@ public final class ModelMapper {
         Sale s = new Sale();
         s.setId(dto.getId());
         s.setUuid(dto.getUuid());
+        dto.setCustomerUuid(s.getCustomerUuid());  // ADD if missing
+        dto.setSupplierUuid(s.getSupplierUuid());  // ADD if missing
         s.setTenantId(dto.getTenantId());
         s.setType(dto.getType());
         s.setUserId(dto.getUserId());
@@ -301,6 +306,7 @@ public final class ModelMapper {
         SaleDTO dto = new SaleDTO();
         dto.setId(s.getId());
         dto.setUuid(s.getUuid());
+
         dto.setTenantId(s.getTenantId());
         dto.setType(s.getType());
         dto.setUserId(s.getUserId());
@@ -362,6 +368,8 @@ public final class ModelMapper {
         SaleItemDTO dto = new SaleItemDTO();
         dto.setId(si.getId());
         dto.setUuid(si.getUuid());
+        dto.setSaleUuid(si.getSaleUuid());        // ADD if missing
+        dto.setProductUuid(si.getProductUuid());  // ADD if missin
         dto.setTenantId(si.getTenantId());
         dto.setSaleId(si.getSaleId());
         dto.setProductId(si.getProductId());
@@ -392,6 +400,7 @@ public final class ModelMapper {
         Payment p = new Payment();
         p.setId(dto.getId());
         p.setUuid(dto.getUuid());
+
         p.setTenantId(dto.getTenantId());
         p.setSaleId(dto.getSaleId());
         p.setSaleUuid(dto.getSaleUuid());
@@ -414,6 +423,7 @@ public final class ModelMapper {
         PaymentDTO dto = new PaymentDTO();
         dto.setId(p.getId());
         dto.setUuid(p.getUuid());
+        dto.setSaleUuid(p.getSaleUuid());
         dto.setTenantId(p.getTenantId());
         dto.setSaleId(p.getSaleId());
         dto.setSaleUuid(p.getSaleUuid());
@@ -464,6 +474,9 @@ public final class ModelMapper {
         StockLedgerDTO dto = new StockLedgerDTO();
         dto.setId(sl.getId());
         dto.setUuid(sl.getUuid());
+
+        dto.setProductUuid(sl.getProductUuid());    // ADD if missing
+        dto.setSaleItemUuid(sl.getSaleItemUuid());
         dto.setTenantId(sl.getTenantId());
         dto.setProductId(sl.getProductId());
         dto.setProductUuid(sl.getProductUuid());
@@ -491,6 +504,7 @@ public final class ModelMapper {
         Category c = new Category();
         c.setId(dto.getId());
         c.setUuid(dto.getUuid());
+        dto.setParentUuid(c.getParentUuid());
         c.setTenantId(dto.getTenantId());
         c.setName(dto.getName());
         c.setDescription(dto.getDescription());
@@ -628,6 +642,10 @@ public final class ModelMapper {
         dto.setSupplierId(model.getSupplierId());
         dto.setSupplierProductCode(model.getSupplierProductCode());
         // 'supplierName' is not part of the model and thus not mapped to the DTO.
+        dto.setProductUuid(null);  // TODO: Get from product lookup
+        dto.setSupplierUuid(null); // TODO: Get from supplier lookup
+        dto.setTenantId(null);     // TODO: Get from context
+        dto.setLastUpdatedAt(null); // TODO: Get from model if available
         return dto;
     }
 }
