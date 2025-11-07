@@ -36,8 +36,30 @@ public class SaleDAO {
     private static final String GET_BY_ID_SQL = BASE_SELECT_SQL + " WHERE id = ? AND tenant_id = ? AND is_deleted = false";
     private static final String GET_BY_CUSTOMER_ID_SQL = BASE_SELECT_SQL + " WHERE customer_id = ? AND tenant_id = ? AND is_deleted = false ORDER BY created_at DESC";
     private static final String GET_ALL_BY_TYPE_SQL = BASE_SELECT_SQL + " WHERE type = ? AND tenant_id = ? AND is_deleted = false ORDER BY created_at DESC";
-    private static final String GET_UNSYNCED_SQL = BASE_SELECT_SQL + " WHERE tenant_id = ? AND is_synced = false";
-    private static final String GET_UNSYNCED_BY_TYPE_SQL = BASE_SELECT_SQL + " WHERE type = ? AND tenant_id = ? AND is_synced = false";
+
+    private static final String GET_UNSYNCED_SQL = """
+        SELECT s.id, s.uuid, s.tenant_id, s.type, s.user_id, s.customer_id, s.supplier_id,
+               s.subtotal, s.tax, s.discount, s.total, s.payment_method, s.payment_status,
+               s.notes, s.created_at, s.last_updated_at, s.is_synced, s.is_deleted,
+               c.uuid AS customer_uuid,
+               sup.uuid AS supplier_uuid
+        FROM sales s
+        LEFT JOIN customers c ON s.customer_id = c.id
+        LEFT JOIN suppliers sup ON s.supplier_id = sup.id
+        WHERE s.tenant_id = ? AND s.is_synced = false
+        """;
+
+    private static final String GET_UNSYNCED_BY_TYPE_SQL = """
+        SELECT s.id, s.uuid, s.tenant_id, s.type, s.user_id, s.customer_id, s.supplier_id,
+               s.subtotal, s.tax, s.discount, s.total, s.payment_method, s.payment_status,
+               s.notes, s.created_at, s.last_updated_at, s.is_synced, s.is_deleted,
+               c.uuid AS customer_uuid,
+               sup.uuid AS supplier_uuid
+        FROM sales s
+        LEFT JOIN customers c ON s.customer_id = c.id
+        LEFT JOIN suppliers sup ON s.supplier_id = sup.id
+        WHERE s.type = ? AND s.tenant_id = ? AND s.is_synced = false
+        """;
 
     private static final String INSERT_TRANSACTIONAL_SQL = """
         INSERT INTO sales(type, user_id, customer_id, supplier_id, subtotal, tax, discount, total, payment_method, payment_status, notes,
@@ -382,7 +404,34 @@ public class SaleDAO {
 
         s.setIsSynced(rs.getInt("is_synced"));
         s.setDeleted(rs.getBoolean("is_deleted"));
+
+        // These UUID columns only exist in GET_UNSYNCED queries
+        if (hasColumn(rs, "customer_uuid")) {
+            s.setCustomerUuid(rs.getString("customer_uuid"));
+        }
+        if (hasColumn(rs, "supplier_uuid")) {
+            s.setSupplierUuid(rs.getString("supplier_uuid"));
+        }
+
         return s;
+    }
+
+    /**
+     * Checks if a column exists in the ResultSet to avoid errors in mapToDTO.
+     * @param rs The ResultSet to check.
+     * @param columnName The name of the column.
+     * @return True if the column exists, false otherwise.
+     * @throws SQLException if metadata cannot be accessed.
+     */
+    private boolean hasColumn(ResultSet rs, String columnName) throws SQLException {
+        ResultSetMetaData rsmd = rs.getMetaData();
+        int columns = rsmd.getColumnCount();
+        for (int x = 1; x <= columns; x++) {
+            if (columnName.equalsIgnoreCase(rsmd.getColumnName(x))) {
+                return true;
+            }
+        }
+        return false;
     }
     /**
      * Retrieves a summarized purchase history for a specific customer.

@@ -30,7 +30,18 @@ public class SaleItemDAO {
         """;
 
     private static final String GET_BY_SALE_ID_SQL = BASE_SELECT_SQL + " WHERE sale_id = ? AND tenant_id = ? AND is_deleted = false";
-    private static final String GET_UNSYNCED_SQL = BASE_SELECT_SQL + " WHERE tenant_id = ? AND is_synced = false";
+
+    private static final String GET_UNSYNCED_SQL = """
+        SELECT si.id, si.uuid, si.tenant_id, si.sale_id, si.product_id, si.supplier_product_code,
+               si.quantity, si.unit_price, si.cost_at_sale, si.tax_rate, si.discount, si.total,
+               si.last_updated_at, si.is_synced, si.is_deleted,
+               s.uuid AS sale_uuid,
+               p.uuid AS product_uuid
+        FROM sale_items si
+        LEFT JOIN sales s ON si.sale_id = s.id
+        LEFT JOIN products p ON si.product_id = p.id
+        WHERE si.tenant_id = ? AND si.is_synced = false
+        """;
     private static final String GET_COUNT_BY_SALE_ID_SQL = "SELECT COUNT(*) FROM sale_items WHERE sale_id = ? AND tenant_id = ? AND is_deleted = false";
 
     private static final String INSERT_TRANSACTIONAL_SQL = """
@@ -249,6 +260,33 @@ public class SaleItemDAO {
         }
         dto.setIsSynced(rs.getInt("is_synced"));
         dto.setDeleted(rs.getBoolean("is_deleted"));
+
+        // These UUID columns only exist in GET_UNSYNCED query
+        if (hasColumn(rs, "sale_uuid")) {
+            dto.setSaleUuid(rs.getString("sale_uuid"));
+        }
+        if (hasColumn(rs, "product_uuid")) {
+            dto.setProductUuid(rs.getString("product_uuid"));
+        }
+
         return dto;
+    }
+
+    /**
+     * Checks if a column exists in the ResultSet to avoid errors in mapToDTO.
+     * @param rs The ResultSet to check.
+     * @param columnName The name of the column.
+     * @return True if the column exists, false otherwise.
+     * @throws SQLException if metadata cannot be accessed.
+     */
+    private boolean hasColumn(ResultSet rs, String columnName) throws SQLException {
+        ResultSetMetaData rsmd = rs.getMetaData();
+        int columns = rsmd.getColumnCount();
+        for (int x = 1; x <= columns; x++) {
+            if (columnName.equalsIgnoreCase(rsmd.getColumnName(x))) {
+                return true;
+            }
+        }
+        return false;
     }
 }

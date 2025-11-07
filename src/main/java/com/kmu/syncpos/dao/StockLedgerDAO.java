@@ -32,7 +32,18 @@ public class StockLedgerDAO {
 
     private static final String GET_BY_ID_SQL = BASE_SELECT_SQL + " WHERE id = ? AND tenant_id = ? AND is_deleted = false";
     private static final String GET_FOR_PRODUCT_SQL = BASE_SELECT_SQL + " WHERE product_id = ? AND tenant_id = ? AND is_deleted = false ORDER BY created_at DESC";
-    private static final String GET_UNSYNCED_SQL = BASE_SELECT_SQL + " WHERE tenant_id = ? AND is_synced = false";
+
+    private static final String GET_UNSYNCED_SQL = """
+        SELECT sl.id, sl.uuid, sl.tenant_id, sl.product_id, sl.quantity_delta, sl.reason,
+               sl.sale_item_id, sl.user_id, sl.notes, sl.created_at, sl.last_updated_at,
+               sl.is_deleted, sl.is_synced,
+               p.uuid AS product_uuid,
+               si.uuid AS sale_item_uuid
+        FROM stock_ledger sl
+        LEFT JOIN products p ON sl.product_id = p.id
+        LEFT JOIN sale_items si ON sl.sale_item_id = si.id
+        WHERE sl.tenant_id = ? AND sl.is_synced = false
+        """;
 
     private static final String INSERT_TRANSACTIONAL_SQL = """
         INSERT INTO stock_ledger(product_id, quantity_delta, reason, sale_item_id, user_id, notes,
@@ -266,6 +277,33 @@ public class StockLedgerDAO {
         if (lastUpdatedAt != null) {
             dto.setLastUpdatedAt(lastUpdatedAt.toLocalDateTime().atOffset(ZoneOffset.UTC));
         }
+
+        // These UUID columns only exist in GET_UNSYNCED query
+        if (hasColumn(rs, "product_uuid")) {
+            dto.setProductUuid(rs.getString("product_uuid"));
+        }
+        if (hasColumn(rs, "sale_item_uuid")) {
+            dto.setSaleItemUuid(rs.getString("sale_item_uuid"));
+        }
+
         return dto;
+    }
+
+    /**
+     * Checks if a column exists in the ResultSet to avoid errors in mapToDTO.
+     * @param rs The ResultSet to check.
+     * @param columnName The name of the column.
+     * @return True if the column exists, false otherwise.
+     * @throws SQLException if metadata cannot be accessed.
+     */
+    private boolean hasColumn(ResultSet rs, String columnName) throws SQLException {
+        ResultSetMetaData rsmd = rs.getMetaData();
+        int columns = rsmd.getColumnCount();
+        for (int x = 1; x <= columns; x++) {
+            if (columnName.equalsIgnoreCase(rsmd.getColumnName(x))) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -39,8 +39,18 @@ public class ProductDAO {
     private static final String GET_LOW_STOCK_SQL = SELECT_WITH_STOCK_SQL + " WHERE p.tenant_id = ? AND p.is_deleted = false AND p.is_active = true GROUP BY p.id HAVING current_stock <= p.min_stock_level ORDER BY p.name";
 
     private static final String GET_UNSYNCED_SQL = """
-        SELECT p.*, 0 AS current_stock
+        SELECT p.id, p.uuid, p.tenant_id, p.sku, p.barcode, p.name, p.description,
+               p.product_type, p.category_id, p.unit_id, p.supplier_id,
+               p.purchase_price, p.selling_price, p.tax_rate, p.min_stock_level,
+               p.reorder_quantity, p.is_active, p.last_updated_at, p.is_synced, p.is_deleted,
+               0 AS current_stock,
+               c.uuid AS category_uuid,
+               u.uuid AS unit_uuid,
+               s.uuid AS supplier_uuid
         FROM products p
+        LEFT JOIN categories c ON p.category_id = c.id
+        LEFT JOIN units u ON p.unit_id = u.id
+        LEFT JOIN suppliers s ON p.supplier_id = s.id
         WHERE p.tenant_id = ? AND p.is_synced = false
         """;
 
@@ -416,6 +426,17 @@ public class ProductDAO {
         // This column only exists in the special SELECT_WITH_STOCK_SQL query
         if (hasColumn(rs, "current_stock")) {
             p.setCurrentStock(rs.getDouble("current_stock"));
+        }
+
+        // These UUID columns only exist in GET_UNSYNCED_SQL query
+        if (hasColumn(rs, "category_uuid")) {
+            p.setCategoryUuid(rs.getString("category_uuid"));
+        }
+        if (hasColumn(rs, "unit_uuid")) {
+            p.setUnitUuid(rs.getString("unit_uuid"));
+        }
+        if (hasColumn(rs, "supplier_uuid")) {
+            p.setSupplierUuid(rs.getString("supplier_uuid"));
         }
 
         return p;
