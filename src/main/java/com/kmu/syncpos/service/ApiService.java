@@ -4,6 +4,7 @@ package com.kmu.syncpos.service;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.kmu.syncpos.util.ConfigLoader;
 import com.kmu.syncpos.util.LocalDateAdapter;
 import com.kmu.syncpos.util.OffsetDateTimeAdapter;
 import okhttp3.*;
@@ -20,12 +21,13 @@ import com.kmu.syncpos.dto.*;
 /**
  * A service for communicating with the remote Supabase API.
  * This class is responsible for all HTTP requests and serialization/deserialization.
+ * Configuration is loaded from application.properties file.
  */
 public final class ApiService {
 
     // --- Constants ---
-    private static final String SUPABASE_URL = "https://tsbanhacgiqxilvfydpf.supabase.co";
-    private static final String SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRzYmFuaGFjZ2lxeGlsdmZ5ZHBmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxMjAyMTYsImV4cCI6MjA2OTY5NjIxNn0.DlaXJASotyIqFs4bEIk6mbmfyMgsVGllNjOlusSc0Vw";
+    private static final String SUPABASE_URL = ConfigLoader.getSupabaseUrl();
+    private static final String SUPABASE_ANON_KEY = ConfigLoader.getSupabaseAnonKey();
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
     // --- Shared Components ---

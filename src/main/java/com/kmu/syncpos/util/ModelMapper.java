@@ -207,9 +207,9 @@ public final class ModelMapper {
         p.setName(dto.getName());
         p.setDescription(dto.getDescription());
         p.setProductType(dto.getProductType());
-        p.setCategoryId(dto.getCategoryId()!= null ? dto.getCategoryId() : null);
-        p.setUnitId(dto.getUnitId() != null ? dto.getUnitId() : null);
-        p.setSupplierId(dto.getSupplierId() != null ? dto.getSupplierId() : null);
+        p.setCategoryId(dto.getCategoryId());
+        p.setUnitId(dto.getUnitId());
+        p.setSupplierId(dto.getSupplierId());
         p.setCategoryUuid(dto.getCategoryUuid());
         p.setUnitUuid(dto.getUnitUuid());
         p.setSupplierUuid(dto.getSupplierUuid());
@@ -274,8 +274,6 @@ public final class ModelMapper {
         Sale s = new Sale();
         s.setId(dto.getId());
         s.setUuid(dto.getUuid());
-        dto.setCustomerUuid(s.getCustomerUuid());  // ADD if missing
-        dto.setSupplierUuid(s.getSupplierUuid());  // ADD if missing
         s.setTenantId(dto.getTenantId());
         s.setType(dto.getType());
         s.setUserId(dto.getUserId());

@@ -206,11 +206,17 @@ public class ProductManagementController {
             if (category != null) {
                 dto.setCategoryId(category.getId());
                 dto.setCategoryUuid(category.getUuid());
+            } else {
+                dto.setCategoryId(null);
+                dto.setCategoryUuid(null);
             }
             Unit unit = unitComboBox.getValue();
             if (unit != null) {
                 dto.setUnitId(unit.getId());
                 dto.setUnitUuid(unit.getUuid());
+            } else {
+                dto.setUnitId(null);
+                dto.setUnitUuid(null);
             }
             Supplier supplier = supplierComboBox.getValue();
             if (supplier != null) {
@@ -273,10 +279,10 @@ public class ProductManagementController {
             initialStockField.setDisable(true);
 
             categoryComboBox.getSelectionModel().select(
-                    categoryComboBox.getItems().stream().filter(c -> c.getId() == product.getCategoryId()).findFirst().orElse(null)
+                    categoryComboBox.getItems().stream().filter(c -> product.getCategoryId() != null && c.getId() == product.getCategoryId()).findFirst().orElse(null)
             );
             unitComboBox.getSelectionModel().select(
-                    unitComboBox.getItems().stream().filter(u -> u.getId() == product.getUnitId()).findFirst().orElse(null)
+                    unitComboBox.getItems().stream().filter(u -> product.getUnitId() != null && u.getId() == product.getUnitId()).findFirst().orElse(null)
             );
             supplierComboBox.getSelectionModel().select(
                     supplierComboBox.getItems().stream().filter(s -> product.getSupplierId() != null && s.getId() == product.getSupplierId()).findFirst().orElse(null)
